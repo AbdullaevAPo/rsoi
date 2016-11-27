@@ -1,0 +1,13 @@
+FastTrip_IntegrationProject_4quare/data/*
+*.o
+ExploreTheWorld_JavaEE_Backand/target/*
+ExploreTheWorld_JavaEE_Backand/lib
+PathFinder_CPP_CalculationBrain/target/*
+*.idea
+*.iml
+target
+FastTrip_IntegrationProject_4quare/.idea
+FastTrip_IntegrationProject_4quare/__pycache__
+FastTrip_IntegrationProject_4quare/osm2po-5.1.0
+FastTrip_IntegrationProject_4quare/hh
+
