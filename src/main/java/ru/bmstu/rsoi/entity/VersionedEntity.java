@@ -1,44 +1,76 @@
 package ru.bmstu.rsoi.entity;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence.*;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 /**
  * Created by ali on 24.11.16.
  */
 @MappedSuperclass
-public abstract class VersionedEntity implements Serializable {
+public class VersionedEntity implements Serializable {
 
     @Id
-    @GeneratedValue
-    protected int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Integer id;
 
     @Version
-    protected int version;
+    protected Integer version;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        try {
+            StringWriter sw = new StringWriter();
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new Hibernate5Module());
+            objectMapper.writeValue(sw, this);
+            return sw.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static<T> String toJson(T object) {
+        try {
+            StringWriter sw = new StringWriter();
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new Hibernate5Module());
+            objectMapper.writeValue(sw, object);
+            return sw.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static<T> T fromJson(String str, Class<T> tClass) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(str, tClass);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

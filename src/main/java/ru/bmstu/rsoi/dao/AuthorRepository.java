@@ -23,8 +23,4 @@ public interface AuthorRepository
                         @Param("firstDate") Date firstDate,
                         @Param("secondDate") Date secondDate,
                         Pageable pageable);
-
-    @Override
-    @Query("select s from Author s join fetch s.books where s.id = :personId")
-    Author findOne(@Param("personId") Integer personId);
 }

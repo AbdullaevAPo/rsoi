@@ -2,6 +2,7 @@ package ru.bmstu.rsoi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.dao.BookInstanceRepository;
 import ru.bmstu.rsoi.dao.BookRepository;
@@ -20,7 +21,7 @@ import java.util.stream.IntStream;
  * Created by ali on 22.11.16.
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class BookInstanceServiceImpl implements BookInstanceService {
 
     @Autowired

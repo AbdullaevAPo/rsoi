@@ -1,5 +1,7 @@
 package ru.bmstu.rsoi.dto;
 
+import ru.bmstu.rsoi.entity.VersionedEntity;
+
 import java.util.Date;
 
 /**
@@ -8,6 +10,20 @@ import java.util.Date;
 public class PersonUpdateRequest extends UpdateVersionedEntityRequest {
     private String name;
     private Date bornDate;
+
+    public PersonUpdateRequest(String name, Date bornDate, int version) {
+        this.name = name;
+        this.bornDate = bornDate;
+        this.version = version;
+    }
+
+    public PersonUpdateRequest(String name, Date bornDate) {
+        this.name = name;
+        this.bornDate = bornDate;
+    }
+
+    public PersonUpdateRequest() {
+    }
 
     public String getName() {
         return name;
@@ -23,5 +39,10 @@ public class PersonUpdateRequest extends UpdateVersionedEntityRequest {
 
     public void setBornDate(Date bornDate) {
         this.bornDate = bornDate;
+    }
+
+    @Override
+    public String toString() {
+        return VersionedEntity.toJson(this);
     }
 }

@@ -6,6 +6,9 @@ package ru.bmstu.rsoi.dto;
 public abstract class UpdateVersionedEntityRequest {
     protected int version;
 
+    public UpdateVersionedEntityRequest() {
+    }
+
     public int getVersion() {
         return version;
     }

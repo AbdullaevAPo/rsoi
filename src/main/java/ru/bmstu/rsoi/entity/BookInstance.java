@@ -1,5 +1,10 @@
 package ru.bmstu.rsoi.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -7,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * Created by ali on 22.11.16.
  */
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class BookInstance extends VersionedEntity{
 
     @ManyToOne

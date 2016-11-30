@@ -46,23 +46,23 @@ public class BookController {
         return bookService.findBook(request.getAuthorName(), request.getBookName(), request.getPageNum());
     }
 
-    @RequestMapping(value = "/{bookdId}", method = RequestMethod.GET)
-    public @ResponseBody Book findBookById(int bookId) {
+    @RequestMapping(value = "/{bookId}", method = RequestMethod.GET)
+    public @ResponseBody Book findBookById(@PathVariable int bookId) {
         return bookService.findBookById(bookId);
     }
 
-    @RequestMapping(value = "/{bookdId}/bind", method = RequestMethod.POST)
+    @RequestMapping(value = "/{bookId}/bind", method = RequestMethod.POST)
     public @ResponseBody BookInstance bindBookToVisitor(@PathVariable int bookId, @RequestParam int visitorId) {
         return bookInstanceService.bindBookToVisitor(bookId, visitorId);
     }
 
     // instances
-    @RequestMapping(value = "{bookId}/instances/{bookInstanceId}/unbind", method = RequestMethod.POST)
+    @RequestMapping(value = "/{bookId}/instances/{bookInstanceId}/unbind", method = RequestMethod.POST)
     public @ResponseBody BookInstance unbindBookFromVisitor(@PathVariable int bookId, @PathVariable int bookInstanceId, @RequestParam int versionId) {
         return bookInstanceService.unbindBookFromVisitor(bookId, bookInstanceId, versionId);
     }
 
-    @RequestMapping(value = "{bookId}/instances/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/{bookId}/instances/add", method = RequestMethod.POST)
     public @ResponseBody List<BookInstance> unbindBookFromVisitor(@PathVariable int bookId, @RequestParam int cnt) {
         return bookInstanceService.addNewBooks(bookId, cnt);
     }

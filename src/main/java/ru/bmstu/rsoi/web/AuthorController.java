@@ -18,7 +18,7 @@ import java.util.List;
 // страница с авторами, поиском авторов по имени/дате рождения(диапозон)
 // добавление автора или удаление
 @RestController
-@RequestMapping("/author")
+@RequestMapping(value = "/author")
 public class AuthorController {
 
     @Autowired
@@ -38,8 +38,8 @@ public class AuthorController {
     }
 
     @ResponseStatus(HttpStatus.FOUND)
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public List<Author> search(@RequestBody PersonSearchRequest searchInfo) {
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public @ResponseBody List<Author> search(@RequestBody PersonSearchRequest searchInfo) {
         return authorService.search(searchInfo.getName(), searchInfo.getBeginDate(),
             searchInfo.getEndDate(), searchInfo.getPageNum());
     }
@@ -51,7 +51,7 @@ public class AuthorController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public Author updateAuthor(@PathVariable int id, @RequestBody PersonUpdateRequest request) {
+    public @ResponseBody Author updateAuthor(@PathVariable int id, @RequestBody PersonUpdateRequest request) {
         return authorService.mergePerson(id, request.getName(), request.getBornDate(), request.getVersion());
     }
 }

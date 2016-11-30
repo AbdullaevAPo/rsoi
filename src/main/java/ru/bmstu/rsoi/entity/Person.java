@@ -1,5 +1,7 @@
 package ru.bmstu.rsoi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.google.gson.Gson;
 
 import javax.annotation.Generated;
@@ -14,6 +16,7 @@ import java.util.Date;
  * Created by ali on 20.11.16.
  */
 @MappedSuperclass
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class Person extends VersionedEntity {
     private static final long serialVersionUID = 1L;
 
@@ -42,5 +45,24 @@ public class Person extends VersionedEntity {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+
+        Person person = (Person) o;
+
+        if (getName() != null ? !getName().equals(person.getName()) : person.getName() != null) return false;
+        return getBirthDate() != null ? getBirthDate().equals(person.getBirthDate()) : person.getBirthDate() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getBirthDate() != null ? getBirthDate().hashCode() : 0);
+        return result;
     }
 }

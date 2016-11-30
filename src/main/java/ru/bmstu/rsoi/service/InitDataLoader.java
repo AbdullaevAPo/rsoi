@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.dao.AuthorRepository;
+import ru.bmstu.rsoi.dao.BookRepository;
 import ru.bmstu.rsoi.entity.Author;
+import ru.bmstu.rsoi.entity.Book;
 
 import javax.annotation.PostConstruct;
 import java.text.ParseException;
@@ -24,6 +26,9 @@ public class InitDataLoader {
     @Autowired
     private AuthorRepository authorRepository;
 
+    @Autowired
+    private BookRepository bookRepository;
+
     @PostConstruct
     public void initAuthor() throws ParseException {
         Author authorTolstoi = new Author (
@@ -31,9 +36,12 @@ public class InitDataLoader {
         Author authorPushkin = new Author(
             "А.С.Пушкин", toDate("1799-01-29"));
         authorRepository.save(Arrays.asList(authorPushkin, authorTolstoi));
+
+        Book book = new Book("Sdasd", Arrays.asList(authorPushkin, authorTolstoi));
+        bookRepository.save(book);
     }
 
-    private static Date toDate(String date) throws ParseException {
+    public static Date toDate(String date) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd").parse(date);
     }
 }

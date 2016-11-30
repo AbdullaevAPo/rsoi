@@ -1,5 +1,6 @@
 package ru.bmstu.rsoi.dao;
 
+import org.apache.http.client.fluent.Request;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.ApplicationConfig;
 import ru.bmstu.rsoi.entity.Author;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -33,4 +36,6 @@ public class AuthorTest {
         authorRepository.save(author);
         logger.info(authorRepository.findAll().toString());
     }
+
+
 }

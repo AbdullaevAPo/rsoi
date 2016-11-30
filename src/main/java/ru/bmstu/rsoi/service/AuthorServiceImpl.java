@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.dao.AuthorRepository;
 import ru.bmstu.rsoi.dto.PersonSearchRequest;
@@ -18,7 +19,7 @@ import static ru.bmstu.rsoi.dto.SearchRequst.PAGE_SIZE;
  * Created by ali on 26.11.16.
  */
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @Qualifier("authorService")
 public class AuthorServiceImpl implements PersonService<Author> {
     @Autowired
@@ -32,6 +33,8 @@ public class AuthorServiceImpl implements PersonService<Author> {
         else {
             author = get(id);
             author.setVersion(version);
+            author.setName(name);
+            author.setBirthDate(bornDate);
         }
         return repository.save(author);
     }

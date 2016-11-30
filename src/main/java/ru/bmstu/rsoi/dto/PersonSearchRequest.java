@@ -1,5 +1,7 @@
 package ru.bmstu.rsoi.dto;
 
+import ru.bmstu.rsoi.entity.VersionedEntity;
+
 import java.util.Date;
 
 /**
@@ -9,6 +11,16 @@ public class PersonSearchRequest extends SearchRequst {
     private String name;
     private Date beginDate;
     private Date endDate;
+
+    public PersonSearchRequest(String name, Date beginDate, Date endDate, int pageNum) {
+        this.name = name;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
+        this.pageNum = pageNum;
+    }
+
+    public PersonSearchRequest() {
+    }
 
     public String getName() {
         return name;
@@ -32,5 +44,10 @@ public class PersonSearchRequest extends SearchRequst {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return VersionedEntity.toJson(this);
     }
 }

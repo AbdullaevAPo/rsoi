@@ -1,9 +1,9 @@
 package ru.bmstu.rsoi.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.logging.Logger;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -39,7 +39,7 @@ public class FoursquareController {
 
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonWithToken = Request.Get(uri).execute().returnContent().asString();
-            return objectMapper.readTree(jsonWithToken).get("access_token").getTextValue();
+            return objectMapper.readTree(jsonWithToken).get("access_token").asText();
         }
         return null;
     }

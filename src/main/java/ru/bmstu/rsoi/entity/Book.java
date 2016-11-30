@@ -1,19 +1,24 @@
 package ru.bmstu.rsoi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
  * Created by ali on 20.11.16.
  */
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class Book extends VersionedEntity{
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable
     private List<Author> author;
 
