@@ -60,4 +60,6 @@ public class BookInstanceServiceImpl implements BookInstanceService {
         bookInstance.setVisitor(null);
         return bookInstance;
     }
+
+
 }

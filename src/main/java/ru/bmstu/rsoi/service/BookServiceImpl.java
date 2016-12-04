@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.dao.BookRepository;
 import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.Book;
+import ru.bmstu.rsoi.web.exception.ImpossibleOperationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TemporalType;
@@ -82,4 +83,17 @@ public class BookServiceImpl implements BookService {
     public Book findBookById(int bookId) {
         return repository.findOne(bookId);
     }
+
+    @Override
+    public void removeBook(int bookId) {
+        Book book = findBookById(bookId);
+        book.getInstances().forEach(i -> {
+            if (i.getVisitor() != null) throw new ImpossibleOperationException(
+                String.format("Не все экземляры книги %s находятся в библиотеке", book.toString()));
+        });
+        repository.delete(book);
+    }
+
+
+
 }

@@ -11,5 +11,5 @@ public interface BookService {
     Book mergeBook(Integer id, String bookName, List<Integer> authors, Integer version);
     List<Book> findBook(String authorName, String bookName, int pageNum);
     Book findBookById(int bookId);
-
+    void removeBook(int bookId);
 }

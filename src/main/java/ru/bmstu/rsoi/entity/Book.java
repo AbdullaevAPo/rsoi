@@ -21,7 +21,7 @@ public class Book extends VersionedEntity{
     @JoinTable
     private List<Author> authors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<BookInstance> instances = new ArrayList<>();
 
     public Book(String name, List<Author> authors) {

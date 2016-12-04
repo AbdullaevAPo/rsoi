@@ -31,8 +31,8 @@ public class BookControllerTest {
 
     private static Date bornDate = DateUtils.addDays(new Date(), -4);
 
-    private static Book ruslanAndLudmila;
-    private static Book warAndPeace;
+    public static Book ruslanAndLudmila;
+    public static Book warAndPeace;
     public static Book addBook(Book book) throws URISyntaxException, IOException {
         return TestUtil.put(
             new BookUpdateRequest(book.getName(),

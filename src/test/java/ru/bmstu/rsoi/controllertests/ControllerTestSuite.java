@@ -11,7 +11,8 @@ import ru.bmstu.rsoi.web.AuthorController;
 @Suite.SuiteClasses( {
     AuthorControllerTest.class,
     LibraryVisitorControllerTest.class,
-    BookControllerTest.class
+    BookControllerTest.class,
+    RemoveDataTest.class
 })
 public class ControllerTestSuite {
 }

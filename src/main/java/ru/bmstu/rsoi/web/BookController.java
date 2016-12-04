@@ -11,8 +11,13 @@ import ru.bmstu.rsoi.entity.BookInstance;
 import ru.bmstu.rsoi.service.BookInstanceService;
 import ru.bmstu.rsoi.service.BookService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import static ru.bmstu.rsoi.web.OAuthChecker.checkOAuth;
 
 /**
  * Created by ali on 23.11.16.
@@ -33,14 +38,20 @@ public class BookController {
     private BookInstanceService bookInstanceService;
 
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
-    public @ResponseBody Book registerNewBook(@RequestBody BookUpdateRequest request) {
-        return bookService.mergeBook(null, request.getBookName(), Ints.asList(request.getAuthors()), null);
+    public @ResponseBody Book registerNewBook(@RequestBody BookUpdateRequest bookUpdateRequest,
+                                              HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!checkOAuth(httpRequest, response))
+            return null;
+        return bookService.mergeBook(null, bookUpdateRequest.getBookName(), Ints.asList(bookUpdateRequest.getAuthors()), null);
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public Book updateBook(@PathVariable int id, @RequestBody BookUpdateRequest request) {
-        return bookService.mergeBook(id, request.getBookName(), request.getAuthors() != null ?
-            Ints.asList(request.getAuthors()) : null, request.getVersion());
+    public Book updateBook(@PathVariable int id, @RequestBody BookUpdateRequest bookUpdaterequest,
+                           HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (!checkOAuth(request, response))
+            return null;
+        return bookService.mergeBook(id, bookUpdaterequest.getBookName(), bookUpdaterequest.getAuthors() != null ?
+            Ints.asList(bookUpdaterequest.getAuthors()) : null, bookUpdaterequest.getVersion());
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -55,18 +66,37 @@ public class BookController {
     }
 
     @RequestMapping(value = "/{bookId}/bind", method = RequestMethod.POST)
-    public @ResponseBody BookInstance bindBookToVisitor(@PathVariable int bookId, @RequestParam int visitorId) {
+    public @ResponseBody BookInstance bindBookToVisitor(@PathVariable int bookId, @RequestParam int visitorId,
+                                                        HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!checkOAuth(httpRequest, response))
+            return null;
         return bookInstanceService.bindBookToVisitor(bookId, visitorId);
     }
 
     // instances
     @RequestMapping(value = "/{bookId}/instances/{bookInstanceId}/unbind", method = RequestMethod.POST)
-    public @ResponseBody BookInstance unbindBookFromVisitor(@PathVariable int bookId, @PathVariable int bookInstanceId, @RequestParam int version) {
+    public @ResponseBody BookInstance unbindBookFromVisitor(@PathVariable int bookId,
+                                                            @PathVariable int bookInstanceId, @RequestParam int version,
+                                                            HttpServletRequest httpRequest,
+                                                            HttpServletResponse response) throws IOException {
+        if (!checkOAuth(httpRequest, response))
+            return null;
         return bookInstanceService.unbindBookFromVisitor(bookId, bookInstanceId, version);
     }
 
     @RequestMapping(value = "/{bookId}/instances/add", method = RequestMethod.POST)
-    public @ResponseBody List<BookInstance> addBookInstances(@PathVariable int bookId, @RequestParam int cnt) {
+    public @ResponseBody List<BookInstance> addBookInstances(@PathVariable int bookId, @RequestParam int cnt,
+                                                             HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!checkOAuth(httpRequest, response))
+            return null;
         return bookInstanceService.addNewBooks(bookId, cnt);
+    }
+
+    @RequestMapping(value = "/{id}/remove", method = RequestMethod.DELETE)
+    public void removeBook(@PathVariable int id,
+                             HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!checkOAuth(httpRequest, response))
+            return;
+        bookService.removeBook(id);
     }
 }
