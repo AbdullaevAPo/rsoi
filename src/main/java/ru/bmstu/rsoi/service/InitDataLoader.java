@@ -31,14 +31,6 @@ public class InitDataLoader {
 
     @PostConstruct
     public void initAuthor() throws ParseException {
-        Author authorTolstoi = new Author (
-            "Л.Н.Толстой", toDate("1828-08-28"));
-        Author authorPushkin = new Author(
-            "А.С.Пушкин", toDate("1799-01-29"));
-        authorRepository.save(Arrays.asList(authorPushkin, authorTolstoi));
-
-        Book book = new Book("Sdasd", Arrays.asList(authorPushkin, authorTolstoi));
-        bookRepository.save(book);
     }
 
     public static Date toDate(String date) throws ParseException {

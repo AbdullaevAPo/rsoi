@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.List;
 
 /**
  * Created by ali on 24.11.16.
@@ -15,7 +16,7 @@ import java.io.StringWriter;
 public class VersionedEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
     @Version
@@ -72,5 +73,9 @@ public class VersionedEntity implements Serializable {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int[] receiveIds(List<? extends VersionedEntity> list) {
+        return list.stream().mapToInt(VersionedEntity::getId).toArray();
     }
 }

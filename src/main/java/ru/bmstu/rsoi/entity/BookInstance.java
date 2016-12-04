@@ -45,4 +45,22 @@ public class BookInstance extends VersionedEntity{
     public void setBook(Book book) {
         this.book = book;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BookInstance)) return false;
+
+        BookInstance that = (BookInstance) o;
+
+        if (getVisitor() != null ? !getVisitor().equals(that.getVisitor()) : that.getVisitor() != null) return false;
+        return getBook() != null ? getBook().equals(that.getBook()) : that.getBook() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getVisitor() != null ? getVisitor().hashCode() : 0;
+        result = 31 * result + (getBook() != null ? getBook().hashCode() : 0);
+        return result;
+    }
 }

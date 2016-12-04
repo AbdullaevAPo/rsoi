@@ -2,14 +2,12 @@ package ru.bmstu.rsoi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.rsoi.dto.PersonSearchRequest;
+import ru.bmstu.rsoi.dto.LibraryPersonSearchRequest;
 import ru.bmstu.rsoi.dto.PersonUpdateRequest;
 import ru.bmstu.rsoi.entity.LibraryVisitor;
-import ru.bmstu.rsoi.service.PersonService;
+import ru.bmstu.rsoi.service.LibraryPersonService;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,28 +23,25 @@ public class VisitorController {
 
     @Autowired
     @Qualifier("visitorService")
-    private PersonService<LibraryVisitor> visitorService;
+    private LibraryPersonService<LibraryVisitor> visitorService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "add", method = RequestMethod.PUT)
     public @ResponseBody LibraryVisitor addVisitor(@RequestBody PersonUpdateRequest request) {
         return visitorService.mergePerson(null, request.getName(), request.getBornDate(), null);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.DELETE)
     public void removeVisitor(@PathVariable int id) {
         visitorService.removePerson(id);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public List<LibraryVisitor> search(@RequestBody PersonSearchRequest searchInfo) {
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public @ResponseBody LibraryVisitor[] search(@RequestBody LibraryPersonSearchRequest searchInfo) {
         return visitorService.search(searchInfo.getName(), searchInfo.getBeginDate(),
-            searchInfo.getEndDate(), searchInfo.getPageNum());
+            searchInfo.getEndDate(), searchInfo.getBookName(), searchInfo.getPageNum())
+        .stream().toArray(LibraryVisitor[]::new);
     }
 
-    @ResponseStatus(HttpStatus.FOUND)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public @ResponseBody LibraryVisitor get(@PathVariable int id) {
         return visitorService.get(id);

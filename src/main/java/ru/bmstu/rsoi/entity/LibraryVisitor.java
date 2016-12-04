@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,9 @@ import java.util.List;
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class LibraryVisitor extends Person {
-    @OneToMany(mappedBy = "visitor")
+    @OneToMany(mappedBy = "visitor", fetch = FetchType.EAGER)
     @Size
-    private List<BookInstance> bookList;
+    private List<BookInstance> bookList = new ArrayList<>();
 
     public LibraryVisitor(String name, Date birthDate) {
         super(name, birthDate);

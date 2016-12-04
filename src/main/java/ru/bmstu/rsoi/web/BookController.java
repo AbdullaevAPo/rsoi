@@ -1,5 +1,6 @@
 package ru.bmstu.rsoi.web;
 
+import com.google.common.primitives.Ints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ru.bmstu.rsoi.entity.BookInstance;
 import ru.bmstu.rsoi.service.BookInstanceService;
 import ru.bmstu.rsoi.service.BookService;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,20 +32,21 @@ public class BookController {
     @Autowired
     private BookInstanceService bookInstanceService;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public @ResponseBody Book registerNewBook(@RequestBody BookUpdateRequest request) {
-        return bookService.mergeBook(null, request.getBookName(), request.getAuthors(), request.getVersion());
+        return bookService.mergeBook(null, request.getBookName(), Ints.asList(request.getAuthors()), null);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public Book updateBook(@PathVariable int id, @RequestBody BookUpdateRequest request) {
-        return bookService.mergeBook(id, request.getBookName(), request.getAuthors(), request.getVersion());
+        return bookService.mergeBook(id, request.getBookName(), request.getAuthors() != null ?
+            Ints.asList(request.getAuthors()) : null, request.getVersion());
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public List<Book> findBook(@RequestBody BookSearchRequest request) {
-        return bookService.findBook(request.getAuthorName(), request.getBookName(), request.getPageNum());
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public @ResponseBody Book[] findBook(@RequestBody BookSearchRequest request) {
+        return bookService.findBook(request.getAuthorName(), request.getBookName(), request.getPageNum())
+            .stream().toArray(Book[]::new);
     }
 
     @RequestMapping(value = "/{bookId}", method = RequestMethod.GET)
@@ -58,12 +61,12 @@ public class BookController {
 
     // instances
     @RequestMapping(value = "/{bookId}/instances/{bookInstanceId}/unbind", method = RequestMethod.POST)
-    public @ResponseBody BookInstance unbindBookFromVisitor(@PathVariable int bookId, @PathVariable int bookInstanceId, @RequestParam int versionId) {
-        return bookInstanceService.unbindBookFromVisitor(bookId, bookInstanceId, versionId);
+    public @ResponseBody BookInstance unbindBookFromVisitor(@PathVariable int bookId, @PathVariable int bookInstanceId, @RequestParam int version) {
+        return bookInstanceService.unbindBookFromVisitor(bookId, bookInstanceId, version);
     }
 
     @RequestMapping(value = "/{bookId}/instances/add", method = RequestMethod.POST)
-    public @ResponseBody List<BookInstance> unbindBookFromVisitor(@PathVariable int bookId, @RequestParam int cnt) {
+    public @ResponseBody List<BookInstance> addBookInstances(@PathVariable int bookId, @RequestParam int cnt) {
         return bookInstanceService.addNewBooks(bookId, cnt);
     }
 }

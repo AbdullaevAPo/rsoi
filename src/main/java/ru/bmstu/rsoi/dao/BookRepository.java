@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    @Query("select b from Book b join b.author a where " +
+    @Query("select b from Book b join b.authors a where " +
         "(:bookName is not null or b.name like concat('%', :bookName, '%'))" +
         "or (:authorName is not null or a.name like concat('%', :authorName, '%')) ")
     List<Book> search(@Param("bookName") String bookName,

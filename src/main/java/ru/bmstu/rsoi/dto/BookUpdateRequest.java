@@ -1,5 +1,8 @@
 package ru.bmstu.rsoi.dto;
 
+import ru.bmstu.rsoi.entity.VersionedEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +10,21 @@ import java.util.List;
  */
 public class BookUpdateRequest extends UpdateVersionedEntityRequest{
     private String bookName;
-    private List<Integer> authors;
+    private int[] authors;
+
+    public BookUpdateRequest(String bookName, int[] authors, int version) {
+        this.bookName = bookName;
+        this.authors = authors;
+        this.version = version;
+    }
+
+    public BookUpdateRequest(String bookName, int[] authors) {
+        this.bookName = bookName;
+        this.authors = authors;
+    }
+
+    public BookUpdateRequest() {
+    }
 
     public String getBookName() {
         return bookName;
@@ -17,11 +34,16 @@ public class BookUpdateRequest extends UpdateVersionedEntityRequest{
         this.bookName = bookName;
     }
 
-    public List<Integer> getAuthors() {
+    public int[] getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Integer> authors) {
+    public void setAuthors(int[] authors) {
         this.authors = authors;
+    }
+
+    @Override
+    public String toString() {
+        return VersionedEntity.toJson(this);
     }
 }

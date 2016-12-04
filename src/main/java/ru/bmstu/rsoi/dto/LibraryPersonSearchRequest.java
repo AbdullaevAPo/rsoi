@@ -7,19 +7,21 @@ import java.util.Date;
 /**
  * Created by ali on 24.11.16.
  */
-public class PersonSearchRequest extends SearchRequst {
+public class LibraryPersonSearchRequest extends SearchRequst {
     private String name;
     private Date beginDate;
     private Date endDate;
+    private String bookName;
 
-    public PersonSearchRequest(String name, Date beginDate, Date endDate, int pageNum) {
+    public LibraryPersonSearchRequest(String name, Date beginDate, Date endDate, String bookName, int pageNum) {
         this.name = name;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.pageNum = pageNum;
+        this.bookName = bookName;
     }
 
-    public PersonSearchRequest() {
+    public LibraryPersonSearchRequest() {
     }
 
     public String getName() {
@@ -46,8 +48,11 @@ public class PersonSearchRequest extends SearchRequst {
         this.endDate = endDate;
     }
 
-    @Override
-    public String toString() {
-        return VersionedEntity.toJson(this);
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 }

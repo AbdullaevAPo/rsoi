@@ -7,6 +7,14 @@ public class BookSearchRequest extends SearchRequst {
     private String authorName;
     private String bookName;
 
+    public BookSearchRequest(String authorName, String bookName) {
+        this.authorName = authorName;
+        this.bookName = bookName;
+    }
+
+    public BookSearchRequest() {
+    }
+
     public String getAuthorName() {
         return authorName;
     }
@@ -22,4 +30,5 @@ public class BookSearchRequest extends SearchRequst {
     public void setBookName(String bookName) {
         this.bookName = bookName;
     }
+
 }

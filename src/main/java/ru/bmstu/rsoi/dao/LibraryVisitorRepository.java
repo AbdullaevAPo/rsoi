@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.LibraryVisitor;
 import ru.bmstu.rsoi.entity.LibraryVisitor;
 
@@ -16,15 +17,15 @@ import java.util.List;
  */
 @Repository
 public interface LibraryVisitorRepository extends JpaRepository<LibraryVisitor, Integer>{
-    @Query("select s from LibraryVisitor s where s.name like concat('%', :name, '%')" +
-        " and (:firstDate is not null or s.birthDate > :firstDate)" +
-        " and (:secondDate is not null or s.birthDate < :secondDate)")
+    @Query("select s from LibraryVisitor s join fetch s.bookList bl join fetch bl.book b " +
+        "where (:name is null or s.name like concat('%', :name, '%')) " +
+        " and (:firstDate is null or s.birthDate >= :firstDate)" +
+        " and (:secondDate is null or s.birthDate <= :secondDate)" +
+        " and (:bookName is null or b.name like concat('%', :bookName, '%'))" +
+        " order by s.name asc, s.birthDate desc")
     List<LibraryVisitor> search(@Param("name") String name,
-                                @Param("firstDate") Date firstDate,
-                                @Param("secondDate") Date secondDate,
-                                Pageable pageable);
-
-    @Override
-    @Query("select s from LibraryVisitor s join fetch s.bookList where s.id = :personId")
-    LibraryVisitor findOne(@Param("personId") Integer personId);
+                        @Param("firstDate") Date firstDate,
+                        @Param("secondDate" ) Date secondDate,
+                        @Param("bookName") String bookName,
+                        Pageable pageable);
 }
