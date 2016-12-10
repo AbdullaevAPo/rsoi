@@ -3,6 +3,7 @@ package ru.bmstu.rsoi.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -16,6 +17,7 @@ import java.util.List;
 /**
  * Created by ali on 20.11.16.
  */
+@Data
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class LibraryVisitor extends Person {
@@ -27,14 +29,5 @@ public class LibraryVisitor extends Person {
         super(name, birthDate);
     }
 
-    public LibraryVisitor() {
-    }
-
-    public List<BookInstance> getBookList() {
-        return bookList;
-    }
-
-    public void setBookList(List<BookInstance> bookList) {
-        this.bookList = bookList;
-    }
+    public LibraryVisitor() {}
 }

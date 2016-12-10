@@ -2,6 +2,7 @@ package ru.bmstu.rsoi.entity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by ali on 24.11.16.
  */
 @MappedSuperclass
-public class VersionedEntity implements Serializable {
+public @Data class VersionedEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,21 +23,7 @@ public class VersionedEntity implements Serializable {
     @Version
     protected Integer version;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
+    public VersionedEntity() { }
 
     @Override
     public String toString() {

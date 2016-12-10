@@ -7,6 +7,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.StringEntity;
 import org.junit.Assert;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.bmstu.rsoi.dto.PersonUpdateRequest;
 import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.VersionedEntity;
@@ -27,12 +28,14 @@ public class TestUtil {
     private static String token = "93c8bb6b-ea71-4dd6-b122-da512522dbc0";
     private static String baseUrl = "http://localhost:8080/rsoi_labs/";
 
-    public static <Rq, Rs> Rs put(Rq request, String addPath, Class<Rs> rsClass) throws IOException {
+    public static <Rq, Rs> Rs put(Rq request, String addPath, Class<Rs> rsClass, boolean needOAuth) throws IOException {
         URI uri = UriBuilder.fromPath(baseUrl).build();
         HttpEntity httpEntity = new StringEntity(request.toString(), "UTF-8");
-        HttpResponse response = Request.Put(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
-            .setHeader("Content-type", "application/json;charset=UTF-8").body(httpEntity)
-            .setHeader("Authorization", "Bearer " + token).execute().returnResponse();
+        Request putRq = Request.Put(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
+            .setHeader("Content-type", "application/json;charset=UTF-8").body(httpEntity);
+        if (needOAuth)
+            putRq.setHeader("Authorization", "Bearer " + token);
+        HttpResponse response = putRq.execute().returnResponse();
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
         StringWriter writer = new StringWriter();
         IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
@@ -40,31 +43,38 @@ public class TestUtil {
     }
 
 
-    public static <Rs> Rs get(String addPath, Class<Rs> rsClass) throws IOException {
+    public static <Rs> Rs get(String addPath, Class<Rs> rsClass, boolean needOAuth) throws IOException {
         URI uri = UriBuilder.fromPath(baseUrl).build();
-        HttpResponse response = Request.Get(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
-            .setHeader("Content-type", "application/json;charset=UTF-8").execute().returnResponse();
+        Request getRq = Request.Get(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
+            .setHeader("Content-type", "application/json;charset=UTF-8");
+        if (needOAuth)
+            getRq.setHeader("Authorization", "Bearer " + token);
+        HttpResponse response = getRq.execute().returnResponse();
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
         StringWriter writer = new StringWriter();
         IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
         return VersionedEntity.fromJson(writer.toString(), rsClass);
     }
 
-    public static void delete(String addPath) throws IOException {
+    public static void delete(String addPath, boolean needOAuth) throws IOException {
         URI uri = UriBuilder.fromPath(baseUrl).build();
-        HttpResponse response = Request.Delete(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
-            .setHeader("Content-type", "application/json;charset=UTF-8")
-            .setHeader("Authorization", "Bearer " + token).execute().returnResponse();
+        Request deleteRq = Request.Delete(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
+            .setHeader("Content-type", "application/json;charset=UTF-8");
+        if (needOAuth)
+            deleteRq.setHeader("Authorization", "Bearer " + token);
+        HttpResponse response = deleteRq.execute().returnResponse();
         Assert.assertEquals(response.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
     }
 
-    public static <Rq, Rs> Rs post(Rq request, String addPath, Class<Rs> rsClass) throws IOException {
+    public static <Rq, Rs> Rs post(Rq request, String addPath, Class<Rs> rsClass, boolean needOAuth) throws IOException {
         URI uri = UriBuilder.fromPath(baseUrl).build();
         HttpEntity httpEntity = request != null ? new StringEntity(request.toString(), "UTF-8") : null;
-        HttpResponse response = Request.Post(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
+        Request postRq = Request.Post(uri.toString() + addPath).setHeader("Accept", "application/json;charset=UTF-8")
             .setHeader("Content-type", "application/json;charset=UTF-8")
-            .setHeader("Authorization", "Bearer " + token)
-            .body(httpEntity).execute().returnResponse();
+            .body(httpEntity);
+        if (needOAuth)
+            postRq.setHeader("Authorization", "Bearer " + token);
+        HttpResponse response = postRq.execute().returnResponse();
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
         StringWriter writer = new StringWriter();
         IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");

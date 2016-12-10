@@ -61,7 +61,11 @@ public class BookController {
     }
 
     @RequestMapping(value = "/{bookId}", method = RequestMethod.GET)
-    public @ResponseBody Book findBookById(@PathVariable int bookId) {
+    public @ResponseBody Book findBookById(@PathVariable int bookId,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response) throws IOException {
+        if (!checkOAuth(request, response))
+            return null;
         return bookService.findBookById(bookId);
     }
 

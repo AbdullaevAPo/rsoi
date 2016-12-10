@@ -1,19 +1,14 @@
 package ru.bmstu.rsoi.dto;
 
+import lombok.Data;
+
 /**
  * Created by ali on 27.11.16.
  */
-public abstract class UpdateVersionedEntityRequest {
+public @Data  abstract class UpdateVersionedEntityRequest {
     protected int version;
 
     public UpdateVersionedEntityRequest() {
     }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
 }
+

@@ -37,12 +37,12 @@ public class BookControllerTest {
         return TestUtil.put(
             new BookUpdateRequest(book.getName(),
                 book.getAuthors().stream().mapToInt(VersionedEntity::getId).toArray()),
-        "book/add", Book.class);
+        "book/add", Book.class, true);
     }
 
     public static BookInstance[] addBookInstances(Book book, int cnt) throws IOException {
 
-        return TestUtil.post(null, "book/" + book.getId() + "/instances/add?cnt=" + cnt, BookInstance[].class);
+        return TestUtil.post(null, "book/" + book.getId() + "/instances/add?cnt=" + cnt, BookInstance[].class, true);
 //        instances.forEach(i -> {
 //            assertEquals(i.getBook(), book);
 //            assertNull(i.getVisitor());
@@ -50,27 +50,27 @@ public class BookControllerTest {
     }
 
     public static BookInstance bindBookToVisitor(Book book, LibraryVisitor visitor) throws IOException {
-        return TestUtil.post(null, "book/" + book.getId() + "/bind?visitorId=" + visitor.getId(), BookInstance.class);
+        return TestUtil.post(null, "book/" + book.getId() + "/bind?visitorId=" + visitor.getId(), BookInstance.class, true);
     }
 
     public static BookInstance unbindBookFromVisitor(BookInstance instance) throws IOException {
-        return TestUtil.post(null, "book/" + instance.getBook().getId() + "/instances/" + instance.getId() + "/unbind?version=" + instance.getVersion(), BookInstance.class);
+        return TestUtil.post(null, "book/" + instance.getBook().getId() + "/instances/" + instance.getId() + "/unbind?version=" + instance.getVersion(), BookInstance.class, true);
     }
 
     public static void removeBook(Book book) throws IOException {
-        TestUtil.delete("book/" + book.getId() + "/remove");
+        TestUtil.delete("book/" + book.getId() + "/remove", true);
     }
 
     public static Book updateBook(int id, BookUpdateRequest updateRequest) throws IOException {
-        return TestUtil.post(updateRequest, "book/" + id + "/update", Book.class);
+        return TestUtil.post(updateRequest, "book/" + id + "/update", Book.class, true);
     }
 
     public static Book[] search(BookSearchRequest searchRequest) throws IOException {
-        return TestUtil.post(searchRequest, "book/search", Book[].class);
+        return TestUtil.post(searchRequest, "book/search", Book[].class, true);
     }
 
     public static Book findById(int id) throws URISyntaxException, IOException {
-        return TestUtil.get("book/" + id, Book.class);
+        return TestUtil.get("book/" + id, Book.class, true);
     }
 
     @Test

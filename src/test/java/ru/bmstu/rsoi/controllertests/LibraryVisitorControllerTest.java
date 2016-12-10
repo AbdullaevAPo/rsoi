@@ -28,23 +28,23 @@ public class LibraryVisitorControllerTest {
     public static LibraryVisitor visitor1 = new LibraryVisitor("Пупкин", bornDate);
     public static LibraryVisitor visitor2 = new LibraryVisitor("Иванов", DateUtils.addDays(bornDate, 2));
     public static LibraryVisitor addLibraryVisitor(LibraryVisitor author) throws URISyntaxException, IOException {
-        return TestUtil.put(new PersonUpdateRequest(author.getName(), author.getBirthDate()), "visitor/add", LibraryVisitor.class);
+        return TestUtil.put(new PersonUpdateRequest(author.getName(), author.getBirthDate()), "visitor/add", LibraryVisitor.class, true);
     }
 
     public static void removeLibraryVisitor(LibraryVisitor author) throws IOException {
-        TestUtil.delete("visitor/" + author.getId() + "/remove");
+        TestUtil.delete("visitor/" + author.getId() + "/remove", true);
     }
 
     public static LibraryVisitor updateLibraryVisitor(int id, PersonUpdateRequest updateRequest) throws IOException {
-        return TestUtil.post(updateRequest, "visitor/" + id + "/update", LibraryVisitor.class);
+        return TestUtil.post(updateRequest, "visitor/" + id + "/update", LibraryVisitor.class, true);
     }
 
     public static LibraryVisitor[] search(LibraryPersonSearchRequest searchRequest) throws IOException {
-        return TestUtil.post(searchRequest, "visitor/search", LibraryVisitor[].class);
+        return TestUtil.post(searchRequest, "visitor/search", LibraryVisitor[].class, true);
     }
 
     public static LibraryVisitor findById(int id) throws URISyntaxException, IOException {
-        return TestUtil.get("visitor/" + id, LibraryVisitor.class);
+        return TestUtil.get("visitor/" + id, LibraryVisitor.class, true);
     }
 
     @Test

@@ -2,6 +2,7 @@ package ru.bmstu.rsoi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by ali on 20.11.16.
  */
+@Data
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class Book extends VersionedEntity{
@@ -29,32 +31,7 @@ public class Book extends VersionedEntity{
         this.authors = authors;
     }
 
-    public Book() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> author) {
-        this.authors = author;
-    }
-
-    public List<BookInstance> getInstances() {
-        return instances;
-    }
-
-    public void setInstances(List<BookInstance> instances) {
-        this.instances = instances;
-    }
+    public Book() { }
 
     @Override
     public boolean equals(Object o) {
@@ -66,14 +43,6 @@ public class Book extends VersionedEntity{
         if (getName() != null ? !getName().equals(book.getName()) : book.getName() != null) return false;
         if (getAuthors() != null ? !Arrays.equals(receiveIds(getAuthors()), receiveIds(book.getAuthors())) : book.getAuthors() != null) return false;
         return getInstances() != null ? Arrays.equals(receiveIds(getInstances()), receiveIds(book.getInstances())) : book.getInstances() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getName() != null ? getName().hashCode() : 0;
-        result = 31 * result + (getAuthors() != null ? getAuthors().hashCode() : 0);
-        result = 31 * result + (getInstances() != null ? getInstances().hashCode() : 0);
-        return result;
     }
 }
 

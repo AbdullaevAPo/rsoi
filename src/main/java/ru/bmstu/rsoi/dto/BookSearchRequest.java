@@ -1,9 +1,13 @@
 package ru.bmstu.rsoi.dto;
 
+import lombok.Data;
+import ru.bmstu.rsoi.entity.VersionedEntity;
+
 /**
  * Created by ali on 27.11.16.
  */
-public class BookSearchRequest extends SearchRequst {
+@Data
+public class BookSearchRequest extends SearchRequest {
     private String authorName;
     private String bookName;
 
@@ -15,20 +19,8 @@ public class BookSearchRequest extends SearchRequst {
     public BookSearchRequest() {
     }
 
-    public String getAuthorName() {
-        return authorName;
+    @Override
+    public String toString() {
+        return VersionedEntity.toJson(this);
     }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
 }

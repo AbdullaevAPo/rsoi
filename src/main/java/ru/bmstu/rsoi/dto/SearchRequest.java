@@ -1,22 +1,20 @@
 package ru.bmstu.rsoi.dto;
 
+import lombok.Data;
 import ru.bmstu.rsoi.entity.VersionedEntity;
+
+import java.io.Serializable;
 
 /**
  * Created by ali on 27.11.16.
  */
-public class SearchRequst {
+public @Data abstract
+class SearchRequest implements Serializable {
     public static final int PAGE_SIZE = 10;
 
     protected int pageNum;
 
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
+    public SearchRequest() { }
 
     @Override
     public String toString() {

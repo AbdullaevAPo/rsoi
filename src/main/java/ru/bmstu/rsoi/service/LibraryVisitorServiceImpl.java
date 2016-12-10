@@ -3,12 +3,10 @@ package ru.bmstu.rsoi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.rsoi.dao.LibraryVisitorRepository;
-import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.LibraryVisitor;
 import ru.bmstu.rsoi.web.exception.ImpossibleOperationException;
 
@@ -18,7 +16,7 @@ import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 
-import static ru.bmstu.rsoi.dto.SearchRequst.PAGE_SIZE;
+import static ru.bmstu.rsoi.dto.SearchRequest.PAGE_SIZE;
 
 /**
  * Created by ali on 26.11.16.

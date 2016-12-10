@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bmstu.rsoi.dao.AppClientRepository;
 import ru.bmstu.rsoi.dao.AuthorRepository;
 import ru.bmstu.rsoi.dao.BookRepository;
+import ru.bmstu.rsoi.entity.AppClient;
 import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.Book;
 
@@ -29,8 +31,13 @@ public class InitDataLoader {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private AppClientRepository appClientRepository;
+
     @PostConstruct
-    public void initAuthor() throws ParseException {
+    public void init() throws ParseException {
+        AppClient appClient = new AppClient("1", "1", "ya.ru", "SBT");
+        appClientRepository.save(appClient);
     }
 
     public static Date toDate(String date) throws ParseException {

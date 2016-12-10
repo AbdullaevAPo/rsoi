@@ -26,23 +26,23 @@ public class AuthorControllerTest {
     public static Author pushkin = new Author("Пушкин", bornDate);
     public static Author tolstoi = new Author("Толстой", DateUtils.addDays(bornDate, 2));
     public static Author addAuthor(Author author) throws URISyntaxException, IOException {
-        return TestUtil.put(new PersonUpdateRequest(author.getName(), author.getBirthDate()), "author/add", Author.class);
+        return TestUtil.put(new PersonUpdateRequest(author.getName(), author.getBirthDate()), "author/add", Author.class, true);
     }
 
     public static void removeAuthor(Author author) throws IOException {
-        TestUtil.delete("author/" + author.getId() + "/remove");
+        TestUtil.delete("author/" + author.getId() + "/remove", true);
     }
 
     public static Author updateAuthor(int id, PersonUpdateRequest updateRequest) throws IOException {
-        return TestUtil.post(updateRequest, "author/" + id + "/update", Author.class);
+        return TestUtil.post(updateRequest, "author/" + id + "/update", Author.class, true);
     }
 
     public static Author[] search(LibraryPersonSearchRequest searchRequest) throws IOException {
-        return TestUtil.post(searchRequest, "author/search", Author[].class);
+        return TestUtil.post(searchRequest, "author/search", Author[].class, true);
     }
 
     public static Author findById(int id) throws URISyntaxException, IOException {
-        return TestUtil.get("author/" + id, Author.class);
+        return TestUtil.get("author/" + id, Author.class, true);
     }
 
     @Test

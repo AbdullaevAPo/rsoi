@@ -2,6 +2,7 @@ package ru.bmstu.rsoi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created by ali on 20.11.16.
  */
+@Data
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.UUIDGenerator.class)
 public class Author extends Person {
@@ -23,16 +25,7 @@ public class Author extends Person {
         super(name, birthDate);
     }
 
-    public Author() {
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
+    public Author() {}
 
     @Override
     public boolean equals(Object o) {
@@ -41,12 +34,5 @@ public class Author extends Person {
         if (!super.equals(o)) return false;
         Author author = (Author) o;
         return getBooks() != null ? Arrays.equals(receiveIds(getBooks()), receiveIds(author.getBooks())) : author.getBooks() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getBooks() != null ? getBooks().hashCode() : 0);
-        return result;
     }
 }
