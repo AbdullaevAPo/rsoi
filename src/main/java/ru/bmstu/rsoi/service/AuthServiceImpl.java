@@ -3,6 +3,8 @@ package ru.bmstu.rsoi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import ru.bmstu.rsoi.dao.AppClientRepository;
 import ru.bmstu.rsoi.dao.TokenRepository;
@@ -10,6 +12,7 @@ import ru.bmstu.rsoi.dao.UserRepository;
 import ru.bmstu.rsoi.entity.AppClient;
 import ru.bmstu.rsoi.entity.Token;
 
+import javax.transaction.Transactional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * Created by S.burykin on 13.11.2016.
  */
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
@@ -25,11 +29,14 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private AppClientRepository companyRepository;
 
+    @Autowired
+    private LoginService loginService;
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String generateCode(String clientId, String redirectUrl, String responseType) {
-        if (responseType.equals("code")) {
+        if (!responseType.equals("code")) {
             ObjectNode errorNode = objectMapper.createObjectNode();
             errorNode.put("error_code", "CODE_ERROR");
             errorNode.put("error_message", "Incorrect responseType");
@@ -41,14 +48,23 @@ public class AuthServiceImpl implements AuthService {
             errorNode.put("error_message", "Incorrect client_id");
             return errorNode.toString();
         }
-        return "redirect:" + redirectUrl + "?code=" + generateHeximalString(16);
+        if (loginService.isLogin() == null)
+            return "auth.html";
+        String code = generateHeximalString(16);
+        Token token = new Token();
+        token.setCode(code);
+        tokenRepository.save(token);
+        return "redirect:" + redirectUrl + "?code=" + code;
     }
 
     @Override
     public String generateToken(String code) {
         if (code == null || code.isEmpty())
             return tokenError("Code is not present in the request");
-        Token tokenEntity = generateToken(new Token());
+        Token tokenEntity = tokenRepository.findByCode(code);
+        if (tokenEntity == null)
+            return tokenError("Incorrect code");
+        tokenEntity = generateToken(tokenEntity);
         tokenRepository.save(tokenEntity);
         return buildTokenResponse(tokenEntity);
     }
@@ -61,11 +77,11 @@ public class AuthServiceImpl implements AuthService {
         if (tokenEntity == null)
             return tokenError("Incorrect refresh_token");
         tokenEntity = generateToken(tokenEntity);
-        tokenRepository.save(tokenEntity);
+        tokenEntity = tokenRepository.save(tokenEntity);
         return buildTokenResponse(tokenEntity);
     }
 
-    private Token generateToken(Token token) {
+    Token generateToken(Token token) {
         String accessToken = generateHeximalString(16);
         String refreshTokenNew = generateHeximalString(16);
         Long expiresIn = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30);

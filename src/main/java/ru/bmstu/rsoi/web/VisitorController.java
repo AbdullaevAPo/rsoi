@@ -11,9 +11,6 @@ import ru.bmstu.rsoi.service.LibraryPersonService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-
-import static ru.bmstu.rsoi.web.OAuthChecker.checkOAuth;
 
 /**
  * Created by ali on 23.11.16.
@@ -27,13 +24,16 @@ import static ru.bmstu.rsoi.web.OAuthChecker.checkOAuth;
 public class VisitorController {
 
     @Autowired
+    private OAuthChecker authChecker;
+
+    @Autowired
     @Qualifier("visitorService")
     private LibraryPersonService<LibraryVisitor> visitorService;
 
     @RequestMapping(value = "add", method = RequestMethod.PUT)
     public @ResponseBody LibraryVisitor addVisitor(@RequestBody PersonUpdateRequest request,
                                                    HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return null;
         return visitorService.mergePerson(null, request.getName(), request.getBornDate(), null);
     }
@@ -41,27 +41,33 @@ public class VisitorController {
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.DELETE)
     public void removeVisitor(@PathVariable int id,
                               HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return;
         visitorService.removePerson(id);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public @ResponseBody LibraryVisitor[] search(@RequestBody LibraryPersonSearchRequest searchInfo) {
+    public @ResponseBody LibraryVisitor[] search(@RequestBody LibraryPersonSearchRequest searchInfo,
+                                                 HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!authChecker.checkOAuth(httpRequest, response))
+            return null;
         return visitorService.search(searchInfo.getName(), searchInfo.getBeginDate(),
             searchInfo.getEndDate(), searchInfo.getBookName(), searchInfo.getPageNum())
         .stream().toArray(LibraryVisitor[]::new);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public @ResponseBody LibraryVisitor get(@PathVariable int id) {
+    public @ResponseBody LibraryVisitor get(@PathVariable int id,
+                                            HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
+        if (!authChecker.checkOAuth(httpRequest, response))
+            return null;
         return visitorService.get(id);
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public LibraryVisitor updateVisitor(@PathVariable int id, @RequestBody PersonUpdateRequest request,
                                         HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return null;
         return visitorService.mergePerson(id, request.getName(), request.getBornDate(), request.getVersion());
     }

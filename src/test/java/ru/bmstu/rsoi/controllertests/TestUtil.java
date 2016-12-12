@@ -7,26 +7,19 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.StringEntity;
 import org.junit.Assert;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.bmstu.rsoi.dto.PersonUpdateRequest;
-import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.VersionedEntity;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
-import java.util.UUID;
-
-import static ru.bmstu.rsoi.web.OAuthChecker.checkOAuth;
 
 /**
  * Created by ali on 01.12.16.
  */
 public class TestUtil {
-    private static String token = "93c8bb6b-ea71-4dd6-b122-da512522dbc0";
-    private static String baseUrl = "http://localhost:8080/rsoi_labs/";
+    public static final String token = "93c8bb6b-ea71-4dd6-b122-da512522dbc0";
+    public static final String baseUrl = "http://localhost:8080/rsoi_labs/";
 
     public static <Rq, Rs> Rs put(Rq request, String addPath, Class<Rs> rsClass, boolean needOAuth) throws IOException {
         URI uri = UriBuilder.fromPath(baseUrl).build();
@@ -79,5 +72,9 @@ public class TestUtil {
         StringWriter writer = new StringWriter();
         IOUtils.copy(response.getEntity().getContent(), writer, "UTF-8");
         return VersionedEntity.fromJson(writer.toString(), rsClass);
+    }
+
+    public static void generateToken() {
+
     }
 }

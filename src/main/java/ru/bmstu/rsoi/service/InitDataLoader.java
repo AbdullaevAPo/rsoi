@@ -10,8 +10,11 @@ import ru.bmstu.rsoi.dao.BookRepository;
 import ru.bmstu.rsoi.entity.AppClient;
 import ru.bmstu.rsoi.entity.Author;
 import ru.bmstu.rsoi.entity.Book;
+import ru.bmstu.rsoi.entity.Token;
+import ru.bmstu.rsoi.web.OAuthChecker;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -33,6 +36,10 @@ public class InitDataLoader {
 
     @Autowired
     private AppClientRepository appClientRepository;
+
+    @Autowired
+    private AuthService authService;
+
 
     @PostConstruct
     public void init() throws ParseException {

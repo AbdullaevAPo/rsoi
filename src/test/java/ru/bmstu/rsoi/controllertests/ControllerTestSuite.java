@@ -12,6 +12,7 @@ import ru.bmstu.rsoi.web.AuthorController;
     AuthorControllerTest.class,
     LibraryVisitorControllerTest.class,
     BookControllerTest.class,
+    OAuthTest.class,
     RemoveDataTest.class
 })
 public class ControllerTestSuite {

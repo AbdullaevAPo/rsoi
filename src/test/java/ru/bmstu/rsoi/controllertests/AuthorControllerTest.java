@@ -38,11 +38,11 @@ public class AuthorControllerTest {
     }
 
     public static Author[] search(LibraryPersonSearchRequest searchRequest) throws IOException {
-        return TestUtil.post(searchRequest, "author/search", Author[].class, true);
+        return TestUtil.post(searchRequest, "author/search", Author[].class, false);
     }
 
     public static Author findById(int id) throws URISyntaxException, IOException {
-        return TestUtil.get("author/" + id, Author.class, true);
+        return TestUtil.get("author/" + id, Author.class, false);
     }
 
     @Test
@@ -78,7 +78,4 @@ public class AuthorControllerTest {
             Assert.assertEquals(findedAuthor, author);
         }
     }
-
-
-
 }

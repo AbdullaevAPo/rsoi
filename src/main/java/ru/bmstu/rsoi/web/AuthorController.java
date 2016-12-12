@@ -11,9 +11,6 @@ import ru.bmstu.rsoi.service.LibraryPersonService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-
-import static ru.bmstu.rsoi.web.OAuthChecker.checkOAuth;
 
 /**
  * Created by ali on 23.11.16.
@@ -27,11 +24,14 @@ public class AuthorController {
     @Autowired
     @Qualifier("authorService")
     private LibraryPersonService<Author> authorService;
+    
+    @Autowired
+    private OAuthChecker authChecker;
 
     @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public @ResponseBody Author addAuthor(@RequestBody PersonUpdateRequest request,
                                           HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return null;
         return authorService.mergePerson(null, request.getName(), request.getBornDate(), null);
     }
@@ -39,7 +39,7 @@ public class AuthorController {
     @RequestMapping(value = "/{id}/remove", method = RequestMethod.DELETE)
     public void removeAuthor(@PathVariable int id,
                              HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return;
         authorService.removePerson(id);
     }
@@ -59,7 +59,7 @@ public class AuthorController {
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public @ResponseBody Author updateAuthor(@PathVariable int id, @RequestBody PersonUpdateRequest request,
                                              HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
-        if (!checkOAuth(httpRequest, response))
+        if (!authChecker.checkOAuth(httpRequest, response))
             return null;
         return authorService.mergePerson(id, request.getName(), request.getBornDate(), request.getVersion());
     }

@@ -22,10 +22,13 @@ public @Data class Token {
 
     private Long expiresIn;
 
-    public Token(String accessToken, String refreshToken, Long expiresIn) {
+    private String code;
+
+    public Token(String accessToken, String refreshToken, Long expiresIn, String code) {
         this.setAccessToken(accessToken);
         this.setRefreshToken(refreshToken);
         this.setExpiresIn(expiresIn);
+        this.setCode(code);
     }
 
     public Token() {

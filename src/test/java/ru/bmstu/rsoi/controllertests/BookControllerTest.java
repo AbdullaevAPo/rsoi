@@ -66,11 +66,11 @@ public class BookControllerTest {
     }
 
     public static Book[] search(BookSearchRequest searchRequest) throws IOException {
-        return TestUtil.post(searchRequest, "book/search", Book[].class, true);
+        return TestUtil.post(searchRequest, "book/search", Book[].class, false);
     }
 
     public static Book findById(int id) throws URISyntaxException, IOException {
-        return TestUtil.get("book/" + id, Book.class, true);
+        return TestUtil.get("book/" + id, Book.class, false);
     }
 
     @Test
